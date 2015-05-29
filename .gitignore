@@ -1,2 +1,14 @@
 # No one wants to see what I mainly use m8
-ogrebullet*/
+# Ignore the Ogre 1.9 SDK
+OgreSDK_vc11_v1-9-0*/
+
+# Ignore the PhysX SDK
+PhysX*/
+
+# Ignore the OgrePhysX Wrapper
+OgrePhysX*/
+
+# Ignore SDL 2
+SDL2-2.0.3*/
+
+# Other
