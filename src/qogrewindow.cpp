@@ -10,8 +10,8 @@ QOgreWindow::QOgreWindow(QWindow *parent)
       isAnimating(false),
       oRoot(NULL),
       oWin(NULL),
-      oCam(NULL)//,
-      //camMan(NULL)
+      oCam(NULL),
+      camMan(NULL)
 {
     setAnimating(true);
     installEventFilter(this);
@@ -20,7 +20,7 @@ QOgreWindow::QOgreWindow(QWindow *parent)
 
 QOgreWindow::~QOgreWindow()
 {
-    //if (camMan) delete camMan;
+    if (camMan) delete camMan;
     delete oRoot;
 }
 
@@ -143,7 +143,7 @@ void QOgreWindow::initialize()
     oCam->lookAt(Ogre::Vector3(0.0f,0.0f,-300.0f));
     oCam->setNearClipDistance(0.1f);
     oCam->setFarClipDistance(200.0f);
-    //camMan = new OgreQtBites::SdkQtCameraMan(oCam);
+    camMan = new OgreQtBites::QtOgreSdkCameraMan(oCam);
 
 #if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
     createCompositor();
@@ -257,4 +257,57 @@ void QOgreWindow::mouseMoveEvent(QMouseEvent *e)
 void QOgreWindow::wheelEvent(QWheelEvent *e)
 {
     if (camMan) camMan->injectWheelMove(*e);
+}
+
+void QOgreWindow::mousePressEvent(QMouseEvent *e)
+{
+    if (camMan) camMan->injectMouseDown(*e);
+}
+
+void QOgreWindow::mouseReleaseEvent(QMouseEvent *e)
+{
+    if (camMan) camMan->injectMouseUp(*e);
+
+    QPoint pos = e->pos();
+    Ogre::Ray mouseRay = oCam->getCameraToViewportRay(
+                (Ogre::Real)pos.x() / oWin->getWidth(),
+                (Ogre::Real)pos.y() / oWin->getHeight());
+    Ogre::RaySceneQuery* sceneQuery = oSceneMgr->createRayQuery(mouseRay);
+    sceneQuery->setSortByDistance(true);
+    Ogre::RaySceneQueryResult vResult = sceneQuery->execute();
+
+    for (size_t ui = 0; ui < vResult.size(); ui++)
+    {
+        if (vResult[ui].movable)
+        {
+            if (vResult[ui].movable->getMovableType().compare("Entity") == 0)
+            {
+                emit entitySelected((Ogre::Entity*)vResult[ui].movable);
+            }
+        }
+    }
+    oSceneMgr->destroyQuery(sceneQuery);
+}
+
+void QOgreWindow::setAnimating(bool _isAnimating)
+{
+    isAnimating = _isAnimating;
+    if (_isAnimating) renderLater();
+}
+
+bool QOgreWindow::frameRenderingQueued(const Ogre::FrameEvent &evt)
+{
+    camMan->frameRenderingQueued(evt);
+    return true;
+}
+
+void QOgreWindow::log(Ogre::String msg)
+{
+    if (Ogre::LogManager::getSingletonPtr() != NULL)
+        Ogre::LogManager::getSingletonPtr()->logMessage(msg);
+}
+
+void QOgreWindow::log(QString msg)
+{
+    log(Ogre::String(msg.toStdString().c_str()));
 }

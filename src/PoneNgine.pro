@@ -1,6 +1,6 @@
 # PoneNgine Qt Project file
 
-QT += core gui network opengl quick
+QT += core gui network opengl quick multimedia
 
 TEMPLATE = app
 TARGET = PoneEngine-Build-0001
@@ -55,11 +55,18 @@ win32 {
 
 debug {
     TARGET = $$join(TARGET,,,d)
-    LIBS *= -lOgreMain_d -lOIS_d -lOgreTerrain_d
+    LIBS *= -lOgreMain_d -lOIS_d -lOgreTerrain_d -lSDL2 -lPhysX3_x86
 }
 
-release:LIBS *= -lOgreMain -lOIS -lOgreOverlay -lOgreTerrain
+release:LIBS *= -lOgreMain -lOIS -lOgreOverlay -lOgreTerrain -lSDL2 -lPhysX3_x86
 
 SOURCES += \
-    main.cpp
+    main.cpp \
+    qogrewindow.cpp
+
+HEADERS += \
+    qogrewindow.h \
+    qtogresdkcameraman.h
+
+FORMS +=
 

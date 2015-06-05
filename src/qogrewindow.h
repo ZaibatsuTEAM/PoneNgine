@@ -3,8 +3,11 @@
 
 // Qt Includes
 #include <QtWidgets/QApplication>
-#include <QtGui/QKeyEvent>
-#include <QtGui/QWindow>
+#include <QEvent>
+#include <QKeyEvent>
+#include <QWindow>
+#include <QMouseEvent>
+#include <QTextStream>
 
 // Ogre3D header
 #include <Ogre.h>
@@ -15,6 +18,9 @@
 
 // Qt-rified Camera Man Include
 #include "qtogresdkcameraman.h"
+
+// Include the Console window for debug purposes
+#include <iostream>
 
 class QOgreWindow : public QWindow, public Ogre::FrameListener
 {
@@ -33,7 +39,7 @@ public:
     virtual void createCompositor();
 #endif
 
-    void setAnimating(bool isAnimating);
+    void setAnimating(bool _isAnimating);
 
 public slots:
     virtual void renderLater();
@@ -56,10 +62,10 @@ protected:
     bool isUpdatePending;
     bool isAnimating;
 
-    // Use SDL for keyboard, Qt for mouse (temporary until I learn more about SDL2's Mosue Handling)
-    // I swear this is a bad idea using two input handlers at the same time.
-    virtual void keyPressEvent(QKeyEvent * kev);
-    virtual void keyReleaseEvent(QKeyEvent * kev);
+    // Let's Use Qt's Keyboard and Mouse Handlers temporarily
+    // If I then find out they work correctly, we dump SDL2 out of this project.
+    virtual void keyPressEvent(QKeyEvent *kev);
+    virtual void keyReleaseEvent(QKeyEvent *kev);
     virtual void mouseMoveEvent(QMouseEvent* e);
     virtual void wheelEvent(QWheelEvent* e);
     virtual void mousePressEvent(QMouseEvent* e);
@@ -67,10 +73,15 @@ protected:
     virtual void exposeEvent(QExposeEvent *e);
     virtual bool event(QEvent *event);
 
+    virtual bool frameRenderingQueued(const Ogre::FrameEvent &evt);
+
     // Log Ogre stuff
     void log(Ogre::String msg);
     void log(QString msg);
 
 };
+
+extern QTextStream out;
+//extern QTextStream in;
 
 #endif // QOGREWINDOW_H

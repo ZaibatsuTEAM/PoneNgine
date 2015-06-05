@@ -32,17 +32,23 @@
  the Qt Library instead of OIS. Taken from the Wiki.
 
  Used for PoneNgine.
+
+ Yes I litteraly typed this entire file, I just feel like typing code is
+ better than copying and pasting. I learn some bits in the process too!
  -----------------------------------------------------------------------------
 */
 
 #ifndef QTOGRESDKCAMERAMAN_H
 #define QTOGRESDKCAMERAMAN_H
 
+#include <Ogre.h>
 #include <OgreCamera.h>
 #include <OgreSceneNode.h>
 #include <OgreFrameListener.h>
 #include <QKeyEvent>
 #include <QMouseEvent>
+
+#include <limits>
 
 //#include <../SDL2-2.0.3/include/SDL.h>
 
@@ -139,7 +145,7 @@ namespace OgreQtBites
         {
             if (oStyle != CS_ORBIT && style == CS_ORBIT)
             {
-                setTarget(oTarget ? oTarget : oCam->getSceneManager());//->getRootSceneNode()); To be fixed some other day I feel working on this engine.
+                setTarget(oTarget ? oTarget : oCam->getSceneManager()->getRootSceneNode());
                 oCam->setFixedYawAxis(true);
                 manualStop();
                 setYawPitchDist(Ogre::Degree(0), Ogre::Degree(15), 150);

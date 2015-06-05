@@ -11,4 +11,5 @@ OgrePhysX*/
 # Ignore SDL 2
 SDL2-2.0.3*/
 
-# Other
+# Ignore the Compile folder (Contains the program already compiled)
+compile*/
