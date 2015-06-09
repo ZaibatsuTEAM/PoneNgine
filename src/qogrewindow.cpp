@@ -1,4 +1,5 @@
 #include "qogrewindow.h"
+#include "ponesettings.h"
 
 #if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
 #include <Compositor/OgreCompositorManager2.h>
@@ -43,7 +44,7 @@ void QOgreWindow::initialize()
 #endif
     Ogre::ConfigFile oConf;
 
-    oConf.load("resources/resources.cfg");
+    oConf.load("/resources/resources.cfg");
 
     Ogre::ConfigFile::SectionIterator seci = oConf.getSectionIterator();
     Ogre::String secName, typeName, archName;
@@ -67,7 +68,7 @@ void QOgreWindow::initialize()
 
     // This list setup search order for used render system
     Ogre::StringVector renderOrder;
-#if defined(Q_OS_WIN)
+#if PONY_PLATFORM == PLAT_WIN32
     renderOrder.push_back("Direct3D9");
     renderOrder.push_back("Direct3D11");
 #endif
@@ -113,7 +114,7 @@ void QOgreWindow::initialize()
     if (rs->getName().find("GL") <= rs->getName().size())
         parameters["currentGLContext"] = Ogre::String("false");
 
-#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+#if PONY_PLATFORM == PLAT_WIN32 || PONY_PLATFORM == PLAT_MACOSX
     parameters["externalWindowHandle"] = Ogre::StringConverter::toString((size_t)(this->winId()));
     parameters["parentWindowHandle"]   = Ogre::StringConverter::toString((size_t)(this->winId()));
 #else
@@ -121,7 +122,7 @@ void QOgreWindow::initialize()
     parameters["parentWindowHandle"] = Ogre::StringConverter::toString((unsigned long)(this->winId()));
 #endif
 
-#if defined(Q_OS_MAC)
+#if PONY_PLATFORM == PLAT_MACOSX
     parameters["macAPI"] = "cocoa";
     parameters["macAPICocoaUseNSView"] = "true";
 #endif

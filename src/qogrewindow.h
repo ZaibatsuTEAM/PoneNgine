@@ -16,7 +16,7 @@
 // For some reason the include in the .pro file didn't work, oh well
 //#include <../SDL2-2.0.3/include/SDL.h>
 
-// Qt-rified Camera Man Include
+// Qt-tified Camera Man Include
 #include "qtogresdkcameraman.h"
 
 // Include the Console window for debug purposes
@@ -80,8 +80,5 @@ protected:
     void log(QString msg);
 
 };
-
-extern QTextStream out;
-//extern QTextStream in;
 
 #endif // QOGREWINDOW_H

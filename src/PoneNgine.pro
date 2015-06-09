@@ -3,9 +3,10 @@
 QT += core gui network opengl quick multimedia
 
 TEMPLATE = app
-TARGET = PoneEngine-Build-0001
+TARGET = PoneEngine-Build-0001a
 
 CONFIG += c++11
+CONFIG += console
 CONFIG -= UNICODE
 
 unix {
@@ -21,9 +22,15 @@ osx {
 
 # Uses MSVC11 (Visual Studio 2012) Compiler
 # Was going to use MinGW, but these libraries don't offer MinGW versions.
+# Wait, you want me to compile from source?
+# I would, but trying to compile a huge library like Ogre is a nightmare.
 win32 {
     # Because Ogre needs this
     LIBS *= user32.lib
+    # Because ENet needs this
+    LIBS *= wsock32.lib \
+            ws2_32.lib \
+            winmm.lib
 
     # You will need to modify these directories for compiling
 
@@ -50,23 +57,30 @@ win32 {
 
     # SDL2 Libs and includes
     LIBS += -LE:/Software_Dev/PoneNgine/SDL2-2.0.3/lib/x86
-    INCLUDEPATH += -LE:/Software_Dev/PoneNgine/SDL2-2.0.3/include
+    INCLUDEPATH += E:/Software_Dev/PoneNgine/SDL2-2.0.3/include
+
+    # ENet Libs and includes
+    LIBS += -LE:/Software_Dev/PoneNgine/ENet
+    INCLUDEPATH += E:/Software_Dev/PoneNgine/ENet/include
 }
 
 debug {
     TARGET = $$join(TARGET,,,d)
     LIBS *= -lOgreMain_d -lOIS_d -lOgreTerrain_d -lSDL2 -lPhysX3_x86
+    LIBS *= -lwsock32 -lws2_32 -lwinmm -lenet
 }
 
-release:LIBS *= -lOgreMain -lOIS -lOgreOverlay -lOgreTerrain -lSDL2 -lPhysX3_x86
+release:LIBS *= -lOgreMain -lOIS -lOgreOverlay -lOgreTerrain -lSDL2 -lPhysX3_x86 -lwsock32 -lws2_32 -lwinmm -lenet
 
 SOURCES += \
     main.cpp \
-    qogrewindow.cpp
+    qogrewindow.cpp \
+    Network/ponenetwork.cpp \
+    ponecore.cpp
 
 HEADERS += \
     qogrewindow.h \
-    qtogresdkcameraman.h
-
-FORMS +=
-
+    qtogresdkcameraman.h \
+    Network/ponenetwork.h \
+    ponesettings.h \
+    ponecore.h

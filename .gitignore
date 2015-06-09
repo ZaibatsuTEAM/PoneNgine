@@ -13,3 +13,6 @@ SDL2-2.0.3*/
 
 # Ignore the Compile folder (Contains the program already compiled)
 compile*/
+
+# Ignore ENet
+Enet*/

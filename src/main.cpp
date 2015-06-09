@@ -2,9 +2,13 @@
 #include <QWidget>
 #include "qogrewindow.h"
 #include <iostream>
+#include "ponesettings.h"
+#include "ponecore.h"
 
-QTextStream out(stdout);
-//QTextStream in(stdin);
+PonyCore pne;
+
+QTextStream cout(stdout);
+QTextStream cin(stdin);
 
 int argc = 0;
 
@@ -15,7 +19,7 @@ int main(int, char**)
     QOgreWindow* win = new QOgreWindow();
 
     a.processEvents();
-    out << "Attempting to open Qt Ogre Window..." << endl;
+    pne.logMsg("[INFO] Attempting to open Qt Ogre Window...");
     win->show();
 
     return a.exec();
