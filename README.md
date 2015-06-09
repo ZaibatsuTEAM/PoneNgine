@@ -5,12 +5,12 @@ PoneNgine is The Wapa Castle Team's take on making a Game Engine uses libraries 
 
 ## Libraries Used
 
-* Rendering:      Ogre3D 1.9
-* Physics:        PhysX 3.3
-* Input:          Currentlty Qt's (QEvent, QKeyEvent, QMouseEvent)
-* Audio:          Currently Qt's
-* Networking:     ENet 1.3.13
-* Misc.           Qt
+* Rendering:      Ogre3D 1.9 (http://www.ogre3d.org)
+* Physics:        PhysX 3.3.2 (https://developer.nvidia.com/gameworksdownload#?tx=$physx_sdk,3.3.2)
+* Input:          Currentlty Qt 5.4.1 (QEvent, QKeyEvent, QMouseEvent) (http://www.qt.io)
+* Audio:          Currently Qt 5.4.1 (QMediaPlayer, etc.) (http://www.qt.io)
+* Networking:     ENet 1.3.13 (http://enet.bespin.org)
+* Misc.           Qt 5.4.1 (http://www.qt.io)
 
 ## Compiling
 
