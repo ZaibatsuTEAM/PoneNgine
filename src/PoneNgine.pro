@@ -76,11 +76,13 @@ SOURCES += \
     main.cpp \
     qogrewindow.cpp \
     Network/ponenetwork.cpp \
-    ponecore.cpp
+    ponecore.cpp \
+    Sound/PoneSound.cpp
 
 HEADERS += \
     qogrewindow.h \
     qtogresdkcameraman.h \
     Network/ponenetwork.h \
     ponesettings.h \
-    ponecore.h
+    ponecore.h \
+    Sound/PoneSound.h

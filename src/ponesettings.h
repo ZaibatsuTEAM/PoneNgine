@@ -1,25 +1,34 @@
 #ifndef PONESETTINGS
 #define PONESETTINGS
 
+#include <QtCore>
+
 /*
  *  PoneNgine settings header
  *
  * We put global things in here. 'Nuff said.
  */
 
+// Engine version and build
+#define PONENGINE_VERSION   "0.0.1a"
+#define PONENGINE_BUILD     "0001a"
+
 // Defined all possible platforms
 #define PLAT_WIN32 0
-#define PLAT_MACOSX 1
-#define PLAT_UNIX 2
-#define PLAT_WINRT 3
-#define PLAT_ANDROID 4
-#define PLAT_IOS 5
+#define PLAT_WIN64 1
+#define PLAT_MACOSX 2
+#define PLAT_UNIX 3
+#define PLAT_WINRT 4
+#define PLAT_ANDROID 5
+#define PLAT_IOS 6
 
 // Yes we are calling almost everything with Pony at the beginning
 // The engine is named after pony, so, why not?
 
 #if defined(WIN32) || defined(_WIN32)
 #define PONY_PLATFORM PLAT_WIN32
+#elif defined(_WIN64)
+#define PONY_PLATFORM PLAT_WIN64
 #elif defined(__APPLE__)
 #define PONY_PLATFORM PLAT_MACOSX
 #elif defined(__WINRT__)
@@ -56,5 +65,13 @@
 #define PREF_LOG_NETINFO    "[NETWORK] "
 #define PREF_LOG_MEDIAINFO  "[MEDIA] "
 
-#endif // PONESETTINGS
+// Typedefs
+typedef unsigned char       PUint8;
+typedef unsigned short      PUint16;
+typedef unsigned int        PUint32;
+typedef unsigned long long  PUint64;
+typedef quintptr            PUintPtr;
+typedef float               PReal_F;
+typedef double              PReal_D;
 
+#endif // PONESETTINGS

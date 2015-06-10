@@ -12,7 +12,9 @@ QOgreWindow::QOgreWindow(QWindow *parent)
       oRoot(NULL),
       oWin(NULL),
       oCam(NULL),
-      camMan(NULL)
+      camMan(NULL),
+      resConfig("resources/resources.cfg"),
+      pluginConfig(Ogre::StringUtil::BLANK)
 {
     setAnimating(true);
     installEventFilter(this);
@@ -23,6 +25,11 @@ QOgreWindow::~QOgreWindow()
 {
     if (camMan) delete camMan;
     delete oRoot;
+}
+
+bool QOgreWindow::go()
+{
+    return true;
 }
 
 /*
@@ -44,7 +51,7 @@ void QOgreWindow::initialize()
 #endif
     Ogre::ConfigFile oConf;
 
-    oConf.load("/resources/resources.cfg");
+    oConf.load(resConfig);
 
     Ogre::ConfigFile::SectionIterator seci = oConf.getSectionIterator();
     Ogre::String secName, typeName, archName;
@@ -61,6 +68,8 @@ void QOgreWindow::initialize()
             Ogre::ResourceGroupManager::getSingleton().addResourceLocation(archName, typeName, secName);
         }
     }
+
+    if (!oRoot->restoreConfig() || oRoot->showConfigDialog()) return;
 
     const Ogre::RenderSystemList& rsList = oRoot->getAvailableRenderers();
 
@@ -104,8 +113,7 @@ void QOgreWindow::initialize()
     QString dimensions = QString("%1 x %2").arg(this->width()).arg(this->height());
     rs->setConfigOption("Video Mode", dimensions.toStdString());
     rs->setConfigOption("Full Screen", "No");
-    rs->setConfigOption("VSync", "Yes");
-
+    rs->setConfigOption("VSync", "No");
     oRoot->setRenderSystem(rs);
     oRoot->initialise(false);
 
@@ -127,8 +135,11 @@ void QOgreWindow::initialize()
     parameters["macAPICocoaUseNSView"] = "true";
 #endif
 
-    oWin = oRoot->createRenderWindow("QOgreWindow Test | PoneNgine Version 0.0.1a", this->width(), this->height(), false, &parameters);
+    oWin = oRoot->createRenderWindow("QOgreWindow Test | PoneNgine Version "+Ogre::String(PONENGINE_VERSION)+" Build "+Ogre::String(PONENGINE_BUILD), this->width(), this->height(), false, &parameters);
     oWin->setVisible(true);
+
+    Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
+    Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
 #if OGRE_VERSION >= ((2 << 16) | (0 << 8) | 0)
     const size_t numThreads = std::max<int>(1, Ogre::PlatformInformation::getNumLogicalCores());
@@ -156,9 +167,6 @@ void QOgreWindow::initialize()
     oCam->setAspectRatio(Ogre::Real(oWin->getWidth()) / Ogre::Real(oWin->getHeight()));
     oCam->setAutoAspectRatio(true);
 
-    Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
-    Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
-
     createScene();
 
     oRoot->addFrameListener(this);
@@ -168,11 +176,14 @@ void QOgreWindow::createScene()
 {
     // Put anything in here, I'll just put an ogre head here for testing purposes. Go crazy.
 
-    oSceneMgr->setAmbientLight(Ogre::ColourValue(0,0,0));
+    oSceneMgr->setAmbientLight(Ogre::ColourValue(0.5,0.5,0.5));
     Ogre::Entity* ogreHead = oSceneMgr->createEntity("ogrehead.mesh");
     Ogre::SceneNode* node = oSceneMgr->getRootSceneNode()->createChildSceneNode();
 
     node->attachObject(ogreHead);
+
+    Ogre::Light* light = oSceneMgr->createLight("MainLight");
+    light->setPosition(20, 80, 50);
 
 }
 
@@ -180,6 +191,14 @@ void QOgreWindow::render()
 {
     Ogre::WindowEventUtilities::messagePump();
     oRoot->renderOneFrame();
+    //oRoot->startRendering();
+    /*while(true)
+    {
+        Ogre::WindowEventUtilities::messagePump();
+        if (oWin->isClosed()) break;
+        if (!oRoot->renderOneFrame()) break;
+    }*/
+
 }
 
 void QOgreWindow::renderLater()
@@ -298,6 +317,8 @@ void QOgreWindow::setAnimating(bool _isAnimating)
 
 bool QOgreWindow::frameRenderingQueued(const Ogre::FrameEvent &evt)
 {
+    if (oWin->isClosed()) return false;
+
     camMan->frameRenderingQueued(evt);
     return true;
 }

@@ -6,6 +6,7 @@
 #include <QString>
 
 #include "ponesettings.h"
+#include "Sound/PoneSound.h"
 
 class PonyCore : public QObject
 {
@@ -15,6 +16,11 @@ public:
     ~PonyCore();
 
     void logMsg(QString str);
+
+    void TestThings();
+
+private:
+    PonyBGM* bgm;
 };
 
 extern QTextStream cout;

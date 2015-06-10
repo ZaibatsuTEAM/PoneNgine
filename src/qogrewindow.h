@@ -11,6 +11,8 @@
 
 // Ogre3D header
 #include <Ogre.h>
+#include <OgreRoot.h>
+#include <OgreConfigFile.h>
 
 // SDL
 // For some reason the include in the .pro file didn't work, oh well
@@ -41,6 +43,8 @@ public:
 
     void setAnimating(bool _isAnimating);
 
+    bool go();
+
 public slots:
     virtual void renderLater();
     virtual void renderNow();
@@ -56,6 +60,8 @@ protected:
     Ogre::SceneManager* oSceneMgr;
     Ogre::Camera* oCam;
     Ogre::ColourValue oBgColor;
+    Ogre::String resConfig;
+    Ogre::String pluginConfig;
 
     OgreQtBites::QtOgreSdkCameraMan* camMan;
 

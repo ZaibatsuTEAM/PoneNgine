@@ -20,6 +20,7 @@ int main(int, char**)
 
     a.processEvents();
     pne.logMsg("[INFO] Attempting to open Qt Ogre Window...");
+    //pne.TestThings();
     win->show();
 
     return a.exec();

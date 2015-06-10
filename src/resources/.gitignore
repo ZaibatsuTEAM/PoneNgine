@@ -1,2 +1,11 @@
-# Ignore Mesh folder
+# Ignore All resources
+# You can throw in your own resources by creating their specified folder
+
+# .mesh files
 mesh*/
+
+# .wav files
+sound*/
+
+# .mp3, .ogg, .wav files
+music*/
