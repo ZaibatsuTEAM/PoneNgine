@@ -23,10 +23,10 @@ PoneNgine is The Wapa Castle Team's take on making a Game Engine uses libraries 
 ## To-Do List
 
 - [x] Get QOgreWindow compiled and running
-- [ ] Get an Ogre mesh rendered in the QOgreWindow
-- [ ] Get an entire Ogre scene rendered in the QOgreWindow
+  - [ ] Get an Ogre mesh rendered in the QOgreWindow
+  - [ ] Get an entire Ogre scene rendered in the QOgreWindow
 - [ ] Implement Physics with PhysX
-- [ ] Implement Audio
-- [x] Implement Networking
+- [x] Implement Audio (still WIP though)
+- [x] Implement Networking (still WIP though)
 
 More Tasks may be added as development goes further.
