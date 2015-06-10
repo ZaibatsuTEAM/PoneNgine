@@ -1,7 +1,7 @@
 # PoneNgine
 
 ## About
-PoneNgine is The Wapa Castle Team's take on making a Game Engine uses libraries found around the internet and putting them together. Also we want this engine to be the first 3D engine to ever support Qt, since there are none as far as research went.
+PoneNgine is The Wapa Castle Team's take on making a Game Engine uses libraries found around the internet and putting them together. Also we want this engine to be the first 3D game engine to ever support Qt, since there are none as far as research went.
 
 ## Libraries Used
 
