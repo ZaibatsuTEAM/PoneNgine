@@ -21,6 +21,7 @@ int main(int, char**)
     a.processEvents();
     pne.logMsg("[INFO] Attempting to open Qt Ogre Window...");
     //pne.TestThings();
+    win->setSize(1280,720);
     win->show();
 
     return a.exec();

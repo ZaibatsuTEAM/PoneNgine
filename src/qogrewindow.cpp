@@ -69,7 +69,24 @@ void QOgreWindow::initialize()
         }
     }
 
-    if (!oRoot->restoreConfig() || oRoot->showConfigDialog()) return;
+    /*Ogre::String name, locType;
+    Ogre::ConfigFile::SectionIterator secIt = oConf.getSectionIterator();
+
+    while(secIt.hasMoreElements())
+    {
+        Ogre::ConfigFile::SettingsMultiMap* _settings = secIt.getNext();
+        Ogre::ConfigFile::SettingsMultiMap::iterator it;
+
+        for (it = _settings->begin(); it != _settings->end(); ++it)
+        {
+            locType = it->first;
+            name    = it->second;
+        }
+
+        Ogre::ResourceGroupManager::getSingleton().addResourceLocation(name,locType);
+    }*/
+
+    //if (!oRoot->restoreConfig() || oRoot->showConfigDialog()) return;
 
     const Ogre::RenderSystemList& rsList = oRoot->getAvailableRenderers();
 
@@ -77,12 +94,12 @@ void QOgreWindow::initialize()
 
     // This list setup search order for used render system
     Ogre::StringVector renderOrder;
-#if PONY_PLATFORM == PLAT_WIN32
+    renderOrder.push_back("OpenGL");
+#if PONY_PLATFORM == PLAT_WIN32 || PONY_PLATFORM == PLAT_WIN64
     renderOrder.push_back("Direct3D9");
     renderOrder.push_back("Direct3D11");
 #endif
-    renderOrder.push_back("OpenGL");
-    renderOrder.push_back("OpenGL 3+");
+    //renderOrder.push_back("OpenGL 3+");
 
     for (Ogre::StringVector::iterator iter = renderOrder.begin(); iter != renderOrder.end(); iter++)
     {
@@ -122,7 +139,7 @@ void QOgreWindow::initialize()
     if (rs->getName().find("GL") <= rs->getName().size())
         parameters["currentGLContext"] = Ogre::String("false");
 
-#if PONY_PLATFORM == PLAT_WIN32 || PONY_PLATFORM == PLAT_MACOSX
+#if PONY_PLATFORM == PLAT_WIN32 || PONY_PLATFORM == PLAT_WIN64 || PONY_PLATFORM == PLAT_MACOSX
     parameters["externalWindowHandle"] = Ogre::StringConverter::toString((size_t)(this->winId()));
     parameters["parentWindowHandle"]   = Ogre::StringConverter::toString((size_t)(this->winId()));
 #else
@@ -174,10 +191,28 @@ void QOgreWindow::initialize()
 
 void QOgreWindow::createScene()
 {
-    // Put anything in here, I'll just put an ogre head here for testing purposes. Go crazy.
+    // Put anything in here, I'll just put a plane and a dragon here for testing purposes. Go crazy.
 
+    // Plane
+    Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
+
+    Ogre::MeshManager::getSingleton().createPlane(
+                "ground",
+                Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                plane,
+                1500,1500,20,20,
+                true,
+                1,5,5,
+                Ogre::Vector3::UNIT_Z);
+
+    Ogre::Entity* ground = oSceneMgr->createEntity("ground");
+    oSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(ground);
+    ground->setCastShadows(false);
+    ground->setMaterialName("Examples/Rockwall");
+
+    // Dragon Mesh
     oSceneMgr->setAmbientLight(Ogre::ColourValue(0.5,0.5,0.5));
-    Ogre::Entity* ogreHead = oSceneMgr->createEntity("ogrehead.mesh");
+    Ogre::Entity* ogreHead = oSceneMgr->createEntity("dragon.mesh");
     Ogre::SceneNode* node = oSceneMgr->getRootSceneNode()->createChildSceneNode();
 
     node->attachObject(ogreHead);
@@ -191,13 +226,13 @@ void QOgreWindow::render()
 {
     Ogre::WindowEventUtilities::messagePump();
     oRoot->renderOneFrame();
-    //oRoot->startRendering();
-    /*while(true)
+    oRoot->startRendering();
+    while(true)
     {
         Ogre::WindowEventUtilities::messagePump();
         if (oWin->isClosed()) break;
         if (!oRoot->renderOneFrame()) break;
-    }*/
+    }
 
 }
 
@@ -332,4 +367,10 @@ void QOgreWindow::log(Ogre::String msg)
 void QOgreWindow::log(QString msg)
 {
     log(Ogre::String(msg.toStdString().c_str()));
+}
+
+void QOgreWindow::setSize(int w, int h)
+{
+    this->setWidth(w);
+    this->setHeight(h);
 }

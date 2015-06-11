@@ -31,6 +31,8 @@ public:
     explicit QOgreWindow(QWindow *parent = NULL);
     ~QOgreWindow();
 
+    void setSize(int w, int h);
+
 public:
     // These are virtual so we can allow further inheritance
     virtual void render(QPainter *painter);
