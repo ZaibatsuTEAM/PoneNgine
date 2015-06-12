@@ -18,7 +18,7 @@ QOgreWindow::QOgreWindow(QWindow *parent)
 {
     setAnimating(true);
     installEventFilter(this);
-    oBgColor = Ogre::ColourValue(0.0f, 0.5f, 1.0f);
+    oBgColor = Ogre::ColourValue(0.8f, 0.4f, 0.5f);
 }
 
 QOgreWindow::~QOgreWindow()
@@ -212,14 +212,14 @@ void QOgreWindow::createScene()
 
     // Dragon Mesh
     oSceneMgr->setAmbientLight(Ogre::ColourValue(0.5,0.5,0.5));
-    Ogre::Entity* ogreHead = oSceneMgr->createEntity("dragon.mesh");
+    Ogre::Entity* ogreHead = oSceneMgr->createEntity("Icosphere.mesh");
     Ogre::SceneNode* node = oSceneMgr->getRootSceneNode()->createChildSceneNode();
 
     node->attachObject(ogreHead);
+    node->setPosition(0.0,70.0,0.0);
 
     Ogre::Light* light = oSceneMgr->createLight("MainLight");
     light->setPosition(20, 80, 50);
-
 }
 
 void QOgreWindow::render()
@@ -227,12 +227,12 @@ void QOgreWindow::render()
     Ogre::WindowEventUtilities::messagePump();
     oRoot->renderOneFrame();
     oRoot->startRendering();
-    while(true)
+    /*while(true)
     {
         Ogre::WindowEventUtilities::messagePump();
         if (oWin->isClosed()) break;
         if (!oRoot->renderOneFrame()) break;
-    }
+    }*/
 
 }
 

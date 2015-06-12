@@ -77,7 +77,8 @@ SOURCES += \
     qogrewindow.cpp \
     Network/ponenetwork.cpp \
     ponecore.cpp \
-    Sound/PoneSound.cpp
+    Sound/PoneSound.cpp \
+    Launcher.cpp
 
 HEADERS += \
     qogrewindow.h \
@@ -85,4 +86,8 @@ HEADERS += \
     Network/ponenetwork.h \
     ponesettings.h \
     ponecore.h \
-    Sound/PoneSound.h
+    Sound/PoneSound.h \
+    Launcher.h
+
+FORMS += \
+    Launcher.ui
